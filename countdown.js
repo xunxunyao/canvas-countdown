@@ -23,7 +23,11 @@ window.onload = function () {
     canvas.height = WINDOW_HEIGHT;
 
     curShowTimeSeconds = getCurrentShowTimeSeconds();
-    render(context);
+
+    setInterval(function () {
+        render(context);
+        update();
+    }, 50);
 
 };
 
@@ -43,11 +47,33 @@ function getCurrentShowTimeSeconds() {
 
 }
 
+function update() {
+
+    var nextShowTimeSeconds = getCurrentShowTimeSeconds();
+    var nextHours = parseInt(nextShowTimeSeconds / 3600);
+    var nextMinutes = parseInt((nextShowTimeSeconds - nextHours * 3600) / 60);
+    var nextSeconds = nextShowTimeSeconds % 60;
+
+    var curHours = parseInt(curShowTimeSeconds / 3600);
+    var curMinutes = parseInt((curShowTimeSeconds - curHours * 3600) / 60);
+    var curSeconds = curShowTimeSeconds % 60;
+
+    if (nextSeconds != curSeconds) {
+        curShowTimeSeconds = nextShowTimeSeconds;
+
+    }
+
+
+}
+
 function render(cxt) {
+
+    //对一个矩形空间內的图案进行刷新操作,不然每次新的图形会叠加在一起
+    cxt.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 
     var hours = parseInt(curShowTimeSeconds / 3600);
     var minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60);
-    var second = curShowTimeSeconds % 60;
+    var seconds = curShowTimeSeconds % 60;
 
     renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hours / 10), cxt);
     //第二个数字，数组是10*7的，相当于7个网格，每一个数字之间又有一点空隙，所以是7*2+1=15
@@ -60,8 +86,8 @@ function render(cxt) {
     //冒号
     renderDigit(MARGIN_LEFT + 69 * (RADIUS + 1), MARGIN_TOP, 10, cxt);
     //秒
-    renderDigit(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(second / 10), cxt);
-    renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(second % 10), cxt);
+    renderDigit(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(seconds / 10), cxt);
+    renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(seconds % 10), cxt);
 }
 
 /**
