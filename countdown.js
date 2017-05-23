@@ -13,6 +13,10 @@ var MARGIN_LEFT = 30;
 const endTime = new Date(2017, 4, 25, 12, 0, 0);
 //距离截止日期多少秒
 var curShowTimeSeconds = 0;
+//小球
+var balls = [];
+//小球的各种颜色
+const colors = ["#749D9B", "#ACBA9D", "#EED19C", "#EFB28C", "#E8837E", "#F79F79", "#F7D08A", "#E3F09B", "#87B6A7", "#FCE4A8"];
 
 window.onload = function () {
 
@@ -47,6 +51,9 @@ function getCurrentShowTimeSeconds() {
 
 }
 
+/**
+ * 更新状态
+ */
 function update() {
 
     var nextShowTimeSeconds = getCurrentShowTimeSeconds();
@@ -59,17 +66,79 @@ function update() {
     var curSeconds = curShowTimeSeconds % 60;
 
     if (nextSeconds != curSeconds) {
+        if (parseInt(curHours / 10) != parseInt(nextHours / 10)) {
+            addBalls(MARGIN_LEFT, MARGIN_TOP, parseInt(curHours / 10));
+        }
+        if (parseInt(curHours % 10) != parseInt(curHours % 10)) {
+            addBalls(MARGIN_LEFT + 15 * (RADIUS + 1), MARGIN_TOP, parseInt(curHours % 10));
+        }
+        if (parseInt(nextMinutes / 10) != parseInt(nextMinutes / 10)) {
+            addBalls(MARGIN_LEFT + 39 * (RADIUS + 1), MARGIN_TOP, parseInt(nextMinutes / 10));
+        }
+        if (parseInt(nextMinutes % 10) != parseInt(nextMinutes % 10)) {
+            addBalls(MARGIN_LEFT + 54 * (RADIUS + 1), MARGIN_TOP, parseInt(nextMinutes % 10));
+        }
+        if (parseInt(curSeconds / 10) != parseInt(curSeconds / 10)) {
+            addBalls(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(curSeconds / 10));
+        }
+        if (parseInt(curSeconds % 10) != parseInt(curSeconds % 10)) {
+            addBalls(curSeconds + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(curSeconds % 10));
+        }
+
         curShowTimeSeconds = nextShowTimeSeconds;
-
     }
-
+    updateBalls();
 
 }
 
+/**
+ * 每一帧降落小球的位置
+ */
+function updateBalls() {
+    for (var i = 0; i < balls.length; i++) {
+        balls[i].x += balls[i].vx;
+        balls[i].y += balls[i].vy;
+        balls[i].vy += balls[i].g;
+        //碰撞检测，加上一个摩擦系数0.75
+        if (balls[i].y >= WINDOW_HEIGHT - RADIUS) {
+            balls[i].y = WINDOW_HEIGHT - RADIUS;
+            balls[i].vy = -balls[i].vy * 0.75;//碰撞之后方向改变，速度降低
+        }
+    }
+}
+
+/**
+ * 在x，y位置的num数字加上彩色的小球
+ * @param x
+ * @param y
+ * @param num
+ */
+function addBalls(x, y, num) {
+    for (var i = 0; i < digit[num].length; i++) {
+        for (var j = 0; j < digit[num][i].length; j++) {
+            if (digit[num][i][j] == 1) {
+                var aBall = {
+                    x: x + j * 2 * (RADIUS + 1) + (RADIUS + 1),
+                    y: y + i * 2 * (RADIUS + 1) + (RADIUS + 1),
+                    g: 1.5 + Math.random(),//1.5-2.5的加速度
+                    vx: Math.pow(-1, Math.ceil(Math.random() * 1000)) * 4,//小球在x方向上的速度-4或者+4
+                    vy: -5,//小球在y上的速度，这样会有一个向上抛的动画
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                };
+                balls.push(aBall);
+            }
+        }
+    }
+}
+
+/**
+ * 渲染出数字
+ * @param cxt
+ */
 function render(cxt) {
 
     //对一个矩形空间內的图案进行刷新操作,不然每次新的图形会叠加在一起
-    cxt.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    cxt.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     var hours = parseInt(curShowTimeSeconds / 3600);
     var minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60);
@@ -88,6 +157,17 @@ function render(cxt) {
     //秒
     renderDigit(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(seconds / 10), cxt);
     renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(seconds % 10), cxt);
+
+    //彩色小球的绘制
+    for(var i=0;i<balls.length;i++){
+        cxt.fillStyle=balls[i].color;
+
+        cxt.beginPath();
+        cxt.arc(balls[i].x,balls[i].y,RADIUS,0,2*Math.PI,true);
+        cxt.closePath();
+
+        cxt.fill();
+    }
 }
 
 /**
