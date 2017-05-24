@@ -105,6 +105,21 @@ function updateBalls() {
             balls[i].vy = -balls[i].vy * 0.75;//碰撞之后方向改变，速度降低
         }
     }
+
+    //去掉画面外的小球，节省内存空间
+    var cnt = 0;
+    for (var i = 0; i < balls.length; i++) {
+        //小球水平方向上在画面之内
+        if (balls[i].x + RADIUS > 0 && balls[i].x - RADIUS < WINDOW_WIDTH) {
+            balls[cnt++] = balls[i];
+
+        }
+    }
+    //0-cnt之内都是在画面內的小球,但最多也只取300个小球
+    while (balls.length > Math.min(300, cnt)) {
+        balls.pop();
+    }
+
 }
 
 /**
@@ -159,11 +174,11 @@ function render(cxt) {
     renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(seconds % 10), cxt);
 
     //彩色小球的绘制
-    for(var i=0;i<balls.length;i++){
-        cxt.fillStyle=balls[i].color;
+    for (var i = 0; i < balls.length; i++) {
+        cxt.fillStyle = balls[i].color;
 
         cxt.beginPath();
-        cxt.arc(balls[i].x,balls[i].y,RADIUS,0,2*Math.PI,true);
+        cxt.arc(balls[i].x, balls[i].y, RADIUS, 0, 2 * Math.PI, true);
         cxt.closePath();
 
         cxt.fill();
