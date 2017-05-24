@@ -10,7 +10,7 @@ var MARGIN_TOP = 60;
 //第一个数字左边距
 var MARGIN_LEFT = 30;
 //截止日期 2017/5/25 12:00:00
-const endTime = new Date(2017, 4, 25, 12, 0, 0);
+const endTime = new Date(2017, 4, 27, 12, 0, 0);
 //距离截止日期多少秒
 var curShowTimeSeconds = 0;
 //小球
@@ -69,19 +69,19 @@ function update() {
         if (parseInt(curHours / 10) != parseInt(nextHours / 10)) {
             addBalls(MARGIN_LEFT, MARGIN_TOP, parseInt(curHours / 10));
         }
-        if (parseInt(curHours % 10) != parseInt(curHours % 10)) {
+        if (parseInt(curHours % 10) != parseInt(nextHours % 10)) {
             addBalls(MARGIN_LEFT + 15 * (RADIUS + 1), MARGIN_TOP, parseInt(curHours % 10));
         }
-        if (parseInt(nextMinutes / 10) != parseInt(nextMinutes / 10)) {
-            addBalls(MARGIN_LEFT + 39 * (RADIUS + 1), MARGIN_TOP, parseInt(nextMinutes / 10));
+        if (parseInt(curMinutes / 10) != parseInt(nextMinutes / 10)) {
+            addBalls(MARGIN_LEFT + 39 * (RADIUS + 1), MARGIN_TOP, parseInt(curMinutes / 10));
         }
-        if (parseInt(nextMinutes % 10) != parseInt(nextMinutes % 10)) {
-            addBalls(MARGIN_LEFT + 54 * (RADIUS + 1), MARGIN_TOP, parseInt(nextMinutes % 10));
+        if (parseInt(curMinutes % 10) != parseInt(nextMinutes % 10)) {
+            addBalls(MARGIN_LEFT + 54 * (RADIUS + 1), MARGIN_TOP, parseInt(curMinutes % 10));
         }
-        if (parseInt(curSeconds / 10) != parseInt(curSeconds / 10)) {
+        if (parseInt(curSeconds / 10) != parseInt(nextSeconds / 10)) {
             addBalls(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(curSeconds / 10));
         }
-        if (parseInt(curSeconds % 10) != parseInt(curSeconds % 10)) {
+        if (parseInt(curSeconds % 10) != parseInt(nextSeconds % 10)) {
             addBalls(curSeconds + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(curSeconds % 10));
         }
 
