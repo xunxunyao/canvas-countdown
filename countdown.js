@@ -36,7 +36,7 @@ window.onload = function () {
 };
 
 /**
- * 当前距离截止日期所少秒
+ * 当前距离截止日期多少秒
  * @returns {number}
  */
 function getCurrentShowTimeSeconds() {
@@ -108,7 +108,7 @@ function updateBalls() {
 }
 
 /**
- * 在x，y位置的num数字加上彩色的小球
+ * 在x，y位置的num数字加上彩色的小球,配置这些小球运动时候的参数
  * @param x
  * @param y
  * @param num
@@ -172,8 +172,8 @@ function render(cxt) {
 
 /**
  * 绘制数字的每一个像素点
- * @param x 每一个数字其实像素点的圆心x坐标
- * @param y 每一个数字其实像素点的圆心y坐标
+ * @param x 每一个数字起始像素点的圆心x坐标
+ * @param y 每一个数字起始像素点的圆心y坐标
  * @param num 要显示的数字
  * @param cxt
  */
