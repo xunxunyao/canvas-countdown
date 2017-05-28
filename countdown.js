@@ -1,16 +1,17 @@
 /**
  * Created by yaoxunxun on 2017/5/20.
  */
-var WINDOW_WIDTH = 1024;
-var WINDOW_HEIGHT = 768;
+//屏幕高宽
+var WINDOW_WIDTH;
+var WINDOW_HEIGHT;
 //每一个像素点的半径
-var RADIUS = 8;
+var RADIUS;
 //数字上边距
 var MARGIN_TOP = 60;
 //第一个数字左边距
-var MARGIN_LEFT = 30;
+var MARGIN_LEFT;
 //截止日期 2017/5/25 12:00:00
-const endTime = new Date(2017, 4, 27, 12, 0, 0);
+const endTime = new Date(2017, 4, 30, 12, 0, 0);
 //距离截止日期多少秒
 var curShowTimeSeconds = 0;
 //小球
@@ -19,6 +20,13 @@ var balls = [];
 const colors = ["#749D9B", "#ACBA9D", "#EED19C", "#EFB28C", "#E8837E", "#F79F79", "#F7D08A", "#E3F09B", "#87B6A7", "#FCE4A8"];
 
 window.onload = function () {
+
+    //自适应
+    WINDOW_WIDTH = document.documentElement.clientWidth || document.body.clientWidth;
+    WINDOW_HEIGHT = document.documentElement.clientHeight || document.body.clientHeight;
+    MARGIN_LEFT = Math.round(WINDOW_WIDTH / 10);//左边距占宽度的1／10取整
+    MARGIN_TOP = Math.round(WINDOW_HEIGHT / 5);
+    RADIUS = Math.round(WINDOW_WIDTH * 4 / 5 / 108) - 1;//扣掉边距就是4／5；最后一个数字是在位置93，一个数字的宽度是7*2+1，所以所有数字应该是108个[半格]
 
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
