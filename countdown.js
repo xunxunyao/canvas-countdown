@@ -10,8 +10,9 @@ var RADIUS;
 var MARGIN_TOP = 60;
 //第一个数字左边距
 var MARGIN_LEFT;
-//截止日期 2017/5/25 12:00:00
-const endTime = new Date(2017, 4, 30, 12, 0, 0);
+//设置距离现在一个小时的倒计时
+var endTime = new Date();
+endTime.setTime(endTime.getTime() + 3600 * 1000);
 //距离截止日期多少秒
 var curShowTimeSeconds = 0;
 //小球
@@ -51,6 +52,9 @@ function getCurrentShowTimeSeconds() {
 
     var curTime = new Date();
     var ret = endTime.getTime() - curTime.getTime();
+
+    // 时钟效果
+    //var ret=curTime.getHours()*3600+curTime.getMinutes()*60+curTime.getSeconds();
 
     //毫秒转化成秒
     ret = Math.round(ret / 1000);
